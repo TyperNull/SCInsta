@@ -78,6 +78,16 @@ jobs:
                 mkdir -p packages
                 wget "$Instagram_URL" --no-verbose -O packages/com.burbn.instagram.ipa
 
+                # Verify the file is a valid ZIP/IPA
+                if ! file packages/com.burbn.instagram.ipa | grep -q "Zip"; then
+                  echo "ERROR: Downloaded file is not a valid IPA (ZIP) file"
+                  echo "File info:"
+                  file packages/com.burbn.instagram.ipa
+                  echo "First 100 bytes (hex):"
+                  head -c 100 packages/com.burbn.instagram.ipa | xxd
+                  exit 1
+                fi
+                
                 ls -la packages
                 
               env:
